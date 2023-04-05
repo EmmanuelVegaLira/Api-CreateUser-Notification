@@ -1,6 +1,6 @@
 api:
-  identifier: Api-Notification
-  port: '5001'
+  identifier: User-notification
+  port: '5002'
 
 logger:
   options:

@@ -1,8 +1,8 @@
 //crear las rutas del crud
 import { Router, Request, Response } from "express";
 import logger from "../lib/logger";
-import NotificationController from './controller/controller.notification';
-import INotification from "./interfaces/notification.interface";
+import NotificationController from './controller/controller.admin';
+import INotification from "./interfaces/admin.interface";
 import { checkToken } from "./middlewares/check-token";
 
 const routes = Router();
