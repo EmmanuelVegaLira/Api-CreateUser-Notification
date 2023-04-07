@@ -1,12 +1,12 @@
 {
-  "name": "api-notification",
+  "name": "api-user",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
     "dev:server": "nodemon",
     "start": "npm run build && node build/src/index.js | npx pino-pretty -t SYS:yyyy-mm-dd,HH:MM:ss",
-    "serve": "nodemon dist/src",
+    "server": "nodemon dist/src",
     "dev": "nodemon dist/src",
     "build": "rimraf ./build && tsc --build",
     "test": "echo \"Error: no test specified\" && exit 1"

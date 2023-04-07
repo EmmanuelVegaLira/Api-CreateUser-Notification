@@ -1,56 +1,45 @@
 //crear las rutas del crud
 import { Router, Request, Response } from "express";
 import logger from "../lib/logger";
-import NotificationController from './controller/controller.admin';
+import AdminController from './controller/controller.admin';
 import INotification from "./interfaces/admin.interface";
 import { checkToken } from "./middlewares/check-token";
 
 const routes = Router();
-const notification = new NotificationController
-//Ruta creacion de contacto
-routes.post('/create', async( req: Request, res: Response ) => {
+const admin = new AdminController
+7//Ruta creacion de contacto
+// registro, logeo
+routes.post('/register',async(req:Request,res:Response)=>{
     const body = req.body
-    const notificationRequest = body
-
-    try {
-        const response = await notification.createNotificacion(notificationRequest)
-        return res.status(response.code).json(response)
-    } catch( err: any ) {
-        return res.status(err.code ? err.code : 500).json(err)
-    }
-})
-
-routes.get('/search/:offer_id',async( req: Request, res: Response ) => {
-    const offer = req.params.offer_id
-
-    try {
-        const response = await notification.getNotificacion(String(offer))
-        return res.status(response.code).json(response)
-    } catch( err: any ) {
-        return res.status(err.code ? err.code : 500).json(err)
-    }
-})
-
-
-//--------------------------------------------------------------
-
-routes.delete('/delete/:offer_id',async(req:Request,res:Response)=>{
-    const offer = req.params.offer_id
+    const registerRequest = body
     try{
-        const response = await notification.deleteNotification(String(offer))
+        const response = await admin.loginAdmin(registerRequest.email,registerRequest.password)
+        return res.status(response.code).json(response)
+    } catch( err: any ) {
+        return res.status(err.code ? err.code : 500).json(err)
+    }
+    
+})
+
+routes.post('/login',async(req:Request,res:Response)=>{
+    const body = req.body
+    const loginRequest = body
+    try {
+        const response = await admin.loginAdmin(loginRequest.email,loginRequest.password)
+        return res.status(response.code).json(response)
+    } catch( err: any ) {
+        return res.status(err.code ? err.code : 500).json(err)
+    }
+})
+
+
+routes.delete('/delete/:email',async(req:Request,res:Response)=>{
+    const email = req.params.email
+    try{
+        const response = await admin.deleteUser(String(email))
         return res.status(response.code).json(response)
     }catch( err: any){
         return res.status(err.code ? err.code: 500).json(err)
-    }
-})
-routes.put('/update',async(req:Request,res:Response)=>{ 
-   const body = req.body
-   const notificationReq:INotification=body
-    try{
-        const response = await notification.updateNotificacion(notificationReq)
-        return res.status(response.code).json(response)
-    }catch(err:any){
-        return res.status(err.code ? err.code:500).json(err)
     }
 })
 

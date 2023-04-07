@@ -3,12 +3,20 @@ import IResponse from '../interfaces/response.interface';
 import Admin from '../models/model.admin';
 import crypto from 'crypto';
 import pino from 'pino';
+import EncryptClass from '../class/encrypt.class';
 
 
 const logger = pino();
 
+
+
 export default class AdminController{
 
+    private encrypt: EncryptClass;
+
+    constructor() {
+        this.encrypt = new EncryptClass();
+    }
 //creando metodos 
     
     //Create login
@@ -31,6 +39,21 @@ export default class AdminController{
                 return resolve({ ok: true, message: 'Usuario creado con exito', response: adminCreated, code: 201 })
             })
 
+        })
+    }
+
+    // metodo delete
+
+    public deleteUser(email:String): Promise<IResponse>{
+        return new Promise((resolve,reject)=>{
+            Admin.deleteOne({email:email},(err:any,adminDB:any)=>{
+                if ( err ) return reject({ ok: false, message: 'Fallo en base de datos', response: err, code: 500 })
+
+                if ( adminDB.deletedCount === 0 ) {
+                    return reject({ ok: false, message: 'No se encontro el registro para ser eliminado', response: null, code: 404 })
+                }
+                return resolve({ ok: true, message: 'Notificacion eliminada!', response: adminDB, code: 200 })
+            })
         })
     }
     // metodo login

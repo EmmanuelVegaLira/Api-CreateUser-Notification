@@ -8,7 +8,7 @@ logger:
 
 mongodb:
   url: 'mongodb://127.0.0.1:27017'
-  database: 'Api-Notification'
+  database: 'Api-User'
   scheme: mongodb
   hostname: '127.0.0.1'
   port: '27017'
