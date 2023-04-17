@@ -14,6 +14,6 @@ server.app.use(express.json({ limit: '50mb'}))
 
 server.app.use(cors({origin: true, credentials: true}))
 
-server.app.use('/api', checkToken,routes)
+server.app.use('/api',routes)
 
 server.start()
