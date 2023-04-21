@@ -64,17 +64,14 @@ export default class AdminService {
                 admin.password = passwordHash
                 admin.salt = salt
             }
-
             Admin.create(admin, (err: any, adminCreated: any) => {
                 if ( err ) {
                     logger.error(err)
                     return reject({ ok: false, message: 'Error al crear admin', response: err, code: 500 })
                 }
-
                 logger.info('User admin succefully created')
                 return resolve({ ok: true, message: 'Usuario creado con exito', response: adminCreated, code: 201 })
             })
-
         })
     }
 
