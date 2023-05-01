@@ -8,10 +8,10 @@ import { checkToken } from "./middlewares/check-token";
 const routes = Router();
 const admin = new AdminController
 //Ruta creacion de contacto
-// registro
+
 routes.post('/createAdmin',async(req:Request,res:Response)=>{
     const body = req.body
-    const {adminCreated} = body
+    const adminCreated:IAdmin = body
     try{
         const response = await admin.createAdmin(adminCreated)
         return res.status(response.code).json(response)
@@ -37,7 +37,7 @@ routes.post('/createSudo',async(req:Request,res:Response)=>{
 
 routes.post('/login',async(req:Request,res:Response)=>{
     const body = req.body
-    const { email, password } = body
+    const {email,password} = body
     try {
         const response = await admin.loginAdmin(email,password)
         return res.status(response.code).json(response)

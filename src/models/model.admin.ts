@@ -9,7 +9,7 @@ const adminSchema: Schema = new Schema({
     salt: { type: String },
     role: { type: String, enum: ['sudo', 'admin', 'user'], default: 'user'},
     imgUser: { type: String },
-    status: { type: String, enum: ['active', 'inactive'], defualt: 'inactive' },
+    status: { type: String, enum: ['active', 'inactive'], defualt: 'active' },
     createdDate: { type: Date, default: Date.now() }
 }, { collection: 'administrators'})
 

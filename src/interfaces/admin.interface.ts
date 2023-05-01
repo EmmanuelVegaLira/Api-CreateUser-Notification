@@ -6,6 +6,6 @@ export default interface IAdmin {
   salt?: String
   role: String
   imgUser?: String
-  status?: String
+  status: String
   createdDate?: Date
 }
