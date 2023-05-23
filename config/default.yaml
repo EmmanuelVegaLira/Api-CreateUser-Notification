@@ -1,0 +1,31 @@
+api:
+  identifier: User-notification
+  port: '5008'
+
+logger:
+  options:
+    level: trace
+
+mongodb:
+  url: 'mongodb://127.0.0.1:27017'
+  database: 'Api-User'
+  scheme: mongodb
+  hostname: '127.0.0.1'
+  port: '27017'
+  timeout: '5000'
+  options:
+    useUnifiedTopology: true
+    useNewUrlParser: true
+
+crypto:
+  auth_secret: '56gXxY{+D6/4m#kZ394j2=bT2eHqTAu>r8zAT>yEn:;TM#9*Vg'
+  auth_ttl: 86400 * 1000
+  auth_algorithm: 'aes256'
+  auth_inputEncoding: 'utf8'
+  auth_outputEncoding: 'hex'
+
+jwt:
+  accessTokenSecret: '0d7c5c5f-768c-4d98-8900-13aadaa21937'
+  refreshTokenSecret: '1a7v8c0l-391k-1f82-4492-tha3taa11334'
+  accessTokenLife: '30d'
+  refreshTokenLife: 2592000
