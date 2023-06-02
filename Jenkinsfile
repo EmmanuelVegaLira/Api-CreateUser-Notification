@@ -1,13 +1,13 @@
 pipeline {
-    agent any
+    agent {label 'devops-qa'}
     environment {
-        DOCKERHUB = 'edgebound'
+        DOCKER_REPO = "tiendaaliadosback.claro.com.co"
     }
     stages {
 
         stage('Clone repository') {
             steps {
-                git branch: 'dev', credentialsId: 'github-credentials', url: 'https://gmedina2021@bitbucket.org/gmedina2021/ad-sockets-microservice.git'
+                git branch: 'dev', credentialsId: 'bitbucket-credentials', url: 'https://EmmanuelVegaLira@bitbucket.org/emmanuelvegalira/api-ecommerce.git'
             }
         }
 
@@ -24,10 +24,10 @@ pipeline {
         stage('Create tag for a new docker image') {
             environment {
                 VERSION = """${sh(returnStdout: true, script: 'jq -r .version ./package.json | xargs').trim()}"""
-                NAME = """${sh(returnStdout: true, script: 'jq -r .name ./package.json | xargs').trim()}"""
+                NAME = """${sh(returnStdout: true, script: 'jq -r .name ./package.json | xargs').trim()}"""     
             }
             steps {
-                sh 'docker tag $NAME:$VERSION $DOCKERHUB/$NAME:$VERSION'
+                sh 'docker tag $NAME:$VERSION $DOCKER_REPO/$NAME:$VERSION'
             }
         }
 
@@ -37,9 +37,9 @@ pipeline {
                 NAME = """${sh(returnStdout: true, script: 'jq -r .name ./package.json | xargs').trim()}"""
             }
             steps {
-                withCredentials([usernamePassword(credentialsId: 'dockerhub-credentials', passwordVariable: 'PASSWORD', usernameVariable: 'USERNAME')]) {
-                    sh 'docker login -u $USERNAME -p $PASSWORD docker.io'
-                    sh 'docker push $USERNAME/$NAME:$VERSION'
+                withCredentials([usernamePassword(credentialsId: 'claroco-nexus', passwordVariable: 'PASSWORD', usernameVariable: 'USERNAME')]) {
+                    sh 'docker login -u $USERNAME -p $PASSWORD $DOCKER_REPO'
+                    sh 'docker push $DOCKER_REPO/$NAME:$VERSION'
                 }
             }
         }
@@ -51,9 +51,9 @@ pipeline {
             }
 
             steps {
-                withKubeConfig([credentialsId: 'kubernetes-credentials', serverUrl: 'https://aa95d2e5-ddb4-456f-9289-25be9076d95c.k8s.ondigitalocean.com']) {
-                    sh "sed -i 's|NAME|${NAME}|' ${WORKSPACE}/k8s/deployment.yaml"
-                    sh "sed -i 's|IMAGE|${DOCKERHUB}/${NAME}:${VERSION}|' ${WORKSPACE}/k8s/deployment.yaml"
+               withKubeConfig([credentialsId: 'kubernetes-credentials', serverUrl: 'https://100.126.20.95:6443']) {
+                   sh "sed -i 's|NAME|${NAME}|' ${WORKSPACE}/k8s/deployment.yaml"
+                   sh "sed -i 's|IMAGE|${DOCKER_REPO}/${NAME}:${VERSION}|' ${WORKSPACE}/k8s/deployment.yaml"
                     sh 'kubectl apply -f ${WORKSPACE}/k8s/deployment.yaml'
                 }
             }
